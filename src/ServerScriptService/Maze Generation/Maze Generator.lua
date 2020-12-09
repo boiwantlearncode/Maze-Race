@@ -177,5 +177,4 @@ function instantiateRow(rowNumber, currentRow)
 	end
 end
 
-
-generateMaze(10, 10)
+return generateMaze

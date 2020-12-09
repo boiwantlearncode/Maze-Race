@@ -11,6 +11,7 @@
     },
     "ServerScriptService": {
       "$className": "ServerScriptService",
+      "$path": "src/ServerScriptService",
       "Maze Generation": {
         "$className": "Folder",
         "$path": "src/ServerScriptService/Maze Generation"
