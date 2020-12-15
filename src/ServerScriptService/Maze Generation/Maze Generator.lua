@@ -12,16 +12,18 @@ function generateMaze(numRows, numCols, rowAbove)
 	rightWalls = Instance.new("Model")
 	bottomWalls = Instance.new("Model")
 	leftWalls = Instance.new("Model")
+	-- ground = Instance.new("Model")
 	maze.Name = "Maze"
 	topWalls.Name = "TopWalls"
 	rightWalls.Name = "RightWalls"
 	bottomWalls.Name = "BottomWalls"
 	leftWalls.Name = "LeftWalls"
+	-- ground.Name = "Ground"
 
-	local normalHillUnits = {}
+	-- local normalHillUnits = {}
 	local extendedHillUnits = {}
 	
-	table.insert(normalHillUnits, game.ReplicatedStorage["Hill 1"])
+	-- table.insert(normalHillUnits, game.ReplicatedStorage["Hill 1"])
 	table.insert(extendedHillUnits, game.ReplicatedStorage["Hill 1 Extended"])
 
 	local curRow = {}
@@ -34,7 +36,7 @@ function generateMaze(numRows, numCols, rowAbove)
 		curRow[#curRow + 1] = cell
 	end
 	
-	initialiseMaze(numRows, numCols, extendedHillUnits)
+	initialiseMaze(numCols, extendedHillUnits)
 	
 	for i=1, numRows do
 		
@@ -77,7 +79,7 @@ function generateMaze(numRows, numCols, rowAbove)
 		
 		-- Generate new row
 		if i ~= numRows then
-			instantiateRow(i, numRows, curRow, rowAbove, normalHillUnits, extendedHillUnits)
+			instantiateRow(i, numRows, curRow, extendedHillUnits)
 			rowAbove = curRow
 			
 			for j=1, #numberInSet do
@@ -102,11 +104,11 @@ function generateMaze(numRows, numCols, rowAbove)
 				end
 				if curRow[j].id ~= curRow[j+1].id then
 					curRow[j].rightWall = false
-					mergeSets(curRow[j].id, curRow[j+1].id, numberInSet, curRow)
+					mergeSets(curRow[j+1].id, curRow[j].id, numberInSet, curRow)
 				end			
 			end
 			
-			instantiateRow(i, numRows, curRow, rowAbove, normalHillUnits, extendedHillUnits)
+			instantiateRow(i, numRows, curRow, extendedHillUnits)
 		end
 	end
 	
@@ -114,6 +116,7 @@ function generateMaze(numRows, numCols, rowAbove)
 	rightWalls.Parent = maze
 	bottomWalls.Parent = maze
 	leftWalls.Parent = maze
+	-- ground.Parent = maze
 	maze.Parent = game.Workspace
 end
 
@@ -131,13 +134,25 @@ function mergeSets(leftSetID, rightSetID, numberInSet, cells)
 	end
 end
 
-function initialiseMaze(numRows, numCols, extendedHillUnits)
+function initialiseMaze(mazeSize, extendedHillUnits)
 	local cellSize = 45
 	local wallHeight = extendedHillUnits[1].Size.Size.Y -- change
 	local wallWidth = 25
 	local extendedLength = 70
+	local groundHeight = 2
+	local mazeLength = extendedLength * mazeSize
 	
-	for i=1, numCols do -- this assumes that the maze is ALWAYS a square
+	-- Lay the ground
+	local ground = Instance.new("Part")
+	ground.Name = "Ground"
+	ground.Material = Enum.Material.Grass
+	ground.Color = Color3.fromRGB(38,139,7)
+	ground.Size = Vector3.new(mazeLength, groundHeight, mazeLength)
+	ground.Position = Vector3.new((mazeLength - wallWidth) / 2, -(groundHeight / 2), (mazeLength - wallWidth) / 2)
+	ground.Anchored = true
+	ground.Parent = maze
+
+	for i=1, mazeSize do -- this assumes that the maze is ALWAYS a square
 		local topWall = extendedHillUnits[1]:Clone()
 
 		local twX = (i - 1) * (cellSize + wallWidth) + (extendedLength / 2)
@@ -168,18 +183,26 @@ function randomUnit(table)
 	return table[math.random(1, #table)]
 end
 
-function instantiateRow(rowNumber, numRows, currentRow, rowAbove, normalHillUnits, extendedHillUnits)
+function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits)
 
 	-- Let's standardise
 	-- Only height is not standardised. For hill biome:
 	-- Normal: 45, x, 25. Extended: 70, x, 25
 	local cellSize = 45 -- same as normal Hill unit length
-	local rwLength = 45
+	local rwLength = 45 -- it's not the wall's length but for the position
 	local rwWidth = 25
 	local bwLength = 70
 	local bwWidth = 25
+	-- local groundHeight = 2
 	
 	for i, v in ipairs(currentRow) do
+		-- local groundCell = Instance.new("Part")
+		-- groundCell.Anchored = true
+		-- groundCell.Material = Enum.Material.Grass
+		-- groundCell.Size = Vector3.new(cellSize, groundHeight, cellSize)
+		-- groundCell.Position = Vector3.new((i - 1) * (cellSize + rwWidth) + (cellSize / 2), -(groundHeight / 2), (rowNumber - 1) * (cellSize + bwWidth) + (cellSize / 2))
+		-- groundCell.Parent = ground
+
 		if v.rightWall then
 			local rightWall
 			if i ~= #currentRow then
