@@ -2,28 +2,21 @@
 
 Cell = require(script.Parent.Cell)
 
-function callGenerateMaze(numRows, numCols)
-	generateMaze(numRows, numCols, {})
-end
-
-function generateMaze(numRows, numCols, rowAbove)
-	maze = Instance.new("Model")
-	topWalls = Instance.new("Model")
-	rightWalls = Instance.new("Model")
-	bottomWalls = Instance.new("Model")
-	leftWalls = Instance.new("Model")
-	-- ground = Instance.new("Model")
+function ellers(numRows, numCols)
+	local abstractMaze = {}
+	local maze = Instance.new("Model")
+	local topWalls = Instance.new("Model")
+	local rightWalls = Instance.new("Model")
+	local bottomWalls = Instance.new("Model")
+	local leftWalls = Instance.new("Model")
 	maze.Name = "Maze"
 	topWalls.Name = "TopWalls"
 	rightWalls.Name = "RightWalls"
 	bottomWalls.Name = "BottomWalls"
 	leftWalls.Name = "LeftWalls"
-	-- ground.Name = "Ground"
 
-	-- local normalHillUnits = {}
 	local extendedHillUnits = {}
 	
-	-- table.insert(normalHillUnits, game.ReplicatedStorage["Hill 1"])
 	table.insert(extendedHillUnits, game.ReplicatedStorage["Hill 1 Extended"])
 
 	local curRow = {}
@@ -36,7 +29,7 @@ function generateMaze(numRows, numCols, rowAbove)
 		curRow[#curRow + 1] = cell
 	end
 	
-	initialiseMaze(numCols, extendedHillUnits)
+	initialiseMaze(numCols, extendedHillUnits, maze, topWalls, leftWalls)
 	
 	for i=1, numRows do
 		
@@ -79,8 +72,8 @@ function generateMaze(numRows, numCols, rowAbove)
 		
 		-- Generate new row
 		if i ~= numRows then
-			instantiateRow(i, numRows, curRow, extendedHillUnits)
-			rowAbove = curRow
+			table.insert(abstractMaze, curRow)
+			instantiateRow(i, numRows, curRow, extendedHillUnits, rightWalls, bottomWalls)
 			
 			for j=1, #numberInSet do
 				numberInSet[j] = 0
@@ -108,7 +101,8 @@ function generateMaze(numRows, numCols, rowAbove)
 				end			
 			end
 			
-			instantiateRow(i, numRows, curRow, extendedHillUnits)
+			table.insert(abstractMaze, curRow)
+			instantiateRow(i, numRows, curRow, extendedHillUnits, rightWalls, bottomWalls)
 		end
 	end
 	
@@ -116,8 +110,9 @@ function generateMaze(numRows, numCols, rowAbove)
 	rightWalls.Parent = maze
 	bottomWalls.Parent = maze
 	leftWalls.Parent = maze
-	-- ground.Parent = maze
 	maze.Parent = game.Workspace
+
+	return abstractMaze -- returns abstract maze in table data structure
 end
 
 
@@ -134,7 +129,7 @@ function mergeSets(leftSetID, rightSetID, numberInSet, cells)
 	end
 end
 
-function initialiseMaze(mazeSize, extendedHillUnits)
+function initialiseMaze(mazeSize, extendedHillUnits, maze, topWalls, leftWalls)
 	local cellSize = 45
 	local wallHeight = extendedHillUnits[1].Size.Size.Y -- change
 	local wallWidth = 25
@@ -146,7 +141,7 @@ function initialiseMaze(mazeSize, extendedHillUnits)
 	local ground = Instance.new("Part")
 	ground.Name = "Ground"
 	ground.Material = Enum.Material.Grass
-	ground.Color = Color3.fromRGB(38,139,7)
+	ground.Color = Color3.fromRGB(17,124,19)
 	ground.Size = Vector3.new(mazeLength, groundHeight, mazeLength)
 	ground.Position = Vector3.new((mazeLength - wallWidth) / 2, -(groundHeight / 2), (mazeLength - wallWidth) / 2)
 	ground.Anchored = true
@@ -183,7 +178,7 @@ function randomUnit(table)
 	return table[math.random(1, #table)]
 end
 
-function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits)
+function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits, rightWalls, bottomWalls)
 
 	-- Let's standardise
 	-- Only height is not standardised. For hill biome:
@@ -196,13 +191,6 @@ function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits)
 	-- local groundHeight = 2
 	
 	for i, v in ipairs(currentRow) do
-		-- local groundCell = Instance.new("Part")
-		-- groundCell.Anchored = true
-		-- groundCell.Material = Enum.Material.Grass
-		-- groundCell.Size = Vector3.new(cellSize, groundHeight, cellSize)
-		-- groundCell.Position = Vector3.new((i - 1) * (cellSize + rwWidth) + (cellSize / 2), -(groundHeight / 2), (rowNumber - 1) * (cellSize + bwWidth) + (cellSize / 2))
-		-- groundCell.Parent = ground
-
 		if v.rightWall then
 			local rightWall
 			if i ~= #currentRow then
@@ -242,4 +230,4 @@ function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits)
 	end
 end
 
-return callGenerateMaze
+return ellers

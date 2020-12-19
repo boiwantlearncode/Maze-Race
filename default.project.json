@@ -12,9 +12,13 @@
     "ServerScriptService": {
       "$className": "ServerScriptService",
       "$path": "src/ServerScriptService",
-      "Maze Generation": {
+      "New Game" : {
         "$className": "Folder",
-        "$path": "src/ServerScriptService/Maze Generation"
+        "$path": "src/ServerScriptService/New Game",
+        "Maze Generation": {
+          "$className": "Folder",
+          "$path": "src/ServerScriptService/New Game/Maze Generation"
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 -- Importing modules
-mazeGenerator = require(game.ServerScriptService["Maze Generation"]["Maze Generator"])
+createNewGame = require(game.ServerScriptService["New Game"].CreateGame)
 
 -- Running functions
-mazeGenerator(10, 10)
+createNewGame()
