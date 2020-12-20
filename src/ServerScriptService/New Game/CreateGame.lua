@@ -5,7 +5,7 @@ miscellaneous = require(script.Parent.Misc)
 
 -- Running functions
 function createNewGame()
-    mazeGenerator(16, 16)
+    mazeGenerator(20, 20)
     generateFeatures()
     miscellaneous()
 end

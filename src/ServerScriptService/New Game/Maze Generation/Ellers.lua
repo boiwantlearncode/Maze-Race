@@ -1,9 +1,10 @@
 -- Algorithm taken from https://clarkcoding.com/eller.html
+-- cellSize = 45; wallWidth = 25
 
 Cell = require(script.Parent.Cell)
 
 function ellers(numRows, numCols)
-	local abstractMaze = {}
+	-- local abstractMaze = {}
 	local maze = Instance.new("Model")
 	local topWalls = Instance.new("Model")
 	local rightWalls = Instance.new("Model")
@@ -72,7 +73,7 @@ function ellers(numRows, numCols)
 		
 		-- Generate new row
 		if i ~= numRows then
-			table.insert(abstractMaze, curRow)
+			-- table.insert(abstractMaze, curRow)
 			instantiateRow(i, numRows, curRow, extendedHillUnits, rightWalls, bottomWalls)
 			
 			for j=1, #numberInSet do
@@ -101,7 +102,7 @@ function ellers(numRows, numCols)
 				end			
 			end
 			
-			table.insert(abstractMaze, curRow)
+			-- table.insert(abstractMaze, curRow)
 			instantiateRow(i, numRows, curRow, extendedHillUnits, rightWalls, bottomWalls)
 		end
 	end
@@ -112,7 +113,7 @@ function ellers(numRows, numCols)
 	leftWalls.Parent = maze
 	maze.Parent = game.Workspace
 
-	return abstractMaze -- returns abstract maze in table data structure
+	-- return abstractMaze -- returns abstract maze in table data structure
 end
 
 
@@ -182,8 +183,8 @@ function instantiateRow(rowNumber, numRows, currentRow, extendedHillUnits, right
 
 	-- Let's standardise
 	-- Only height is not standardised. For hill biome:
-	-- Normal: 45, x, 25. Extended: 70, x, 25
-	local cellSize = 45 -- same as normal Hill unit length
+	-- Extended: 70, x, 25
+	local cellSize = 45 
 	local rwLength = 45 -- it's not the wall's length but for the position
 	local rwWidth = 25
 	local bwLength = 70
