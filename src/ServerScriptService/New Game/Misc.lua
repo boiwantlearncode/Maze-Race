@@ -2,7 +2,6 @@
 
 function miscellaneous()
     removeForceField()
-    setPlayerSpeeds() -- only applies to those with speed boosts, permanent or temporary. may move to Features
 end
 
 function removeForceField()
@@ -12,10 +11,6 @@ function removeForceField()
             ForceField:Destroy()
         end)
     end)
-end
-
-function setPlayerSpeeds()
-
 end
 
 return miscellaneous

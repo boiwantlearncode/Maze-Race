@@ -18,7 +18,7 @@ function ellers(numRows, numCols)
 
 	local extendedHillUnits = {}
 	
-	table.insert(extendedHillUnits, game.ReplicatedStorage["Hill 1 Extended"])
+	table.insert(extendedHillUnits, game.ReplicatedStorage.Assets["Hill 1 Extended"])
 
 	local curRow = {}
 	local numberInSet = {}

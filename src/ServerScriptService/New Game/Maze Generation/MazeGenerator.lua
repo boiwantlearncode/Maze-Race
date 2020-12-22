@@ -12,7 +12,7 @@ function generateMaze(numRows, numCols)
 		ellers(numRows, numCols)
 		distance = mazeDistance(start, finish)
 		print(distance)
-		if distance > 3000 then
+		if distance > 2200 then -- will have to change
 			break
 		end
 		game.Workspace.Maze:Destroy()

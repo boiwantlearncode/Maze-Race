@@ -2,13 +2,6 @@
   "name": "Maze Race",
   "tree": {
     "$className": "DataModel",
-    "ReplicatedStorage": {
-      "$className": "ReplicatedStorage",
-      "Scripts": {
-        "$className": "Folder",
-        "$path": "src/ReplicatedStorage"
-      }
-    },
     "ServerScriptService": {
       "$className": "ServerScriptService",
       "$path": "src/ServerScriptService",
